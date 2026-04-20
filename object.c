@@ -48,3 +48,28 @@ void compute_hash(const void *data, size_t len, ObjectID *id_out) {
 // Get the filesystem path where an object should be stored.
 // Format: .pes/objects/XX/YYYYYYYY...
 // The first 2 hex chars form the shard directory; the rest is the filename.
+void object_path(const ObjectID *id, char *path_out, size_t path_size) {
+    char hex[HASH_HEX_SIZE + 1];
+    hash_to_hex(id, hex);
+    snprintf(path_out, path_size, "%s/%.2s/%s", OBJECTS_DIR, hex, hex + 2);
+}
+
+int object_exists(const ObjectID *id) {
+    char path[512];
+    object_path(id, path, sizeof(path));
+    return access(path, F_OK) == 0;
+}
+
+// ─── TODO: Implement these ──────────────────────────────────────────────────
+
+// Write an object to the store.
+//
+// Object format on disk:
+//   "<type> <size>\0<data>"
+//   where <type> is "blob", "tree", or "commit"
+//   and <size> is the decimal string of the data length
+//
+// Steps:
+//   1. Build the full object: header ("blob 16\0") + data
+//   2. Compute SHA-256 hash of the FULL object (header + data)
+//   3. Check if object already exists (deduplication) — if so, just return success
