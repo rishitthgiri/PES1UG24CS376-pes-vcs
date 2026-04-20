@@ -27,6 +27,7 @@ test_tree: test_tree.o object.o tree.o
 
 all: pes test_objects test_tree
 
+# Cleans up the environment dropping binaries and wiping the repository directory
 clean:
 	rm -f pes test_objects test_tree $(OBJS) test_objects.o test_tree.o
 	rm -rf .pes
