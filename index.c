@@ -138,3 +138,38 @@ int index_load(Index *index) {
     // TODO: Implement index loading
     // (See Lab Appendix for logical steps)
     (void)index;
+    return -1;
+}
+
+// Save the index to .pes/index atomically.
+//
+// HINTS - Useful functions and syscalls:
+//   - qsort                            : sorting the entries array by path
+//   - fopen (with "w"), fprintf        : writing to the temporary file
+//   - hash_to_hex                      : converting ObjectID for text output
+//   - fflush, fileno, fsync, fclose    : flushing userspace buffers and syncing to disk
+//   - rename                           : atomically moving the temp file over the old index
+//
+// Returns 0 on success, -1 on error.
+int index_save(const Index *index) {
+    // TODO: Implement atomic index saving
+    // (See Lab Appendix for logical steps)
+    (void)index;
+    return -1;
+}
+
+// Stage a file for the next commit.
+//
+// HINTS - Useful functions and syscalls:
+//   - fopen, fread, fclose             : reading the target file's contents
+//   - object_write                     : saving the contents as OBJ_BLOB
+//   - stat / lstat                     : getting file metadata (size, mtime, mode)
+//   - index_find                       : checking if the file is already staged
+//
+// Returns 0 on success, -1 on error.
+int index_add(Index *index, const char *path) {
+    // TODO: Implement file staging
+    // (See Lab Appendix for logical steps)
+    (void)index; (void)path;
+    return -1;
+}
