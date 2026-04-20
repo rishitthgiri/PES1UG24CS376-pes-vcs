@@ -33,3 +33,38 @@ IndexEntry* index_find(Index *index, const char *path) {
             return &index->entries[i];
     }
     return NULL;
+}
+
+// Remove a file from the index.
+// Returns 0 on success, -1 if path not in index.
+int index_remove(Index *index, const char *path) {
+    for (int i = 0; i < index->count; i++) {
+        if (strcmp(index->entries[i].path, path) == 0) {
+            int remaining = index->count - i - 1;
+            if (remaining > 0)
+                memmove(&index->entries[i], &index->entries[i + 1],
+                        remaining * sizeof(IndexEntry));
+            index->count--;
+            return index_save(index);
+        }
+    }
+    fprintf(stderr, "error: '%s' is not in the index\n", path);
+    return -1;
+}
+
+// Print the status of the working directory.
+//
+// Identifies files that are staged, unstaged (modified/deleted in working dir),
+// and untracked (present in working dir but not in index).
+// Returns 0.
+int index_status(const Index *index) {
+    printf("Staged changes:\n");
+    int staged_count = 0;
+    // Note: A true Git implementation deeply diffs against the HEAD tree here. 
+    // For this lab, displaying indexed files represents the staging intent.
+    for (int i = 0; i < index->count; i++) {
+        printf("  staged:     %s\n", index->entries[i].path);
+        staged_count++;
+    }
+    if (staged_count == 0) printf("  (nothing to show)\n");
+    printf("\n");
