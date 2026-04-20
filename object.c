@@ -73,3 +73,28 @@ int object_exists(const ObjectID *id) {
 //   1. Build the full object: header ("blob 16\0") + data
 //   2. Compute SHA-256 hash of the FULL object (header + data)
 //   3. Check if object already exists (deduplication) — if so, just return success
+//   4. Create shard directory (.pes/objects/XX/) if it doesn't exist
+//   5. Write to a temporary file in the same shard directory
+//   6. fsync() the temporary file to ensure data reaches disk
+//   7. rename() the temp file to the final path (atomic on POSIX)
+//   8. Open and fsync() the shard directory to persist the rename
+//   9. Store the computed hash in *id_out
+
+// HINTS - Useful syscalls and functions for this phase:
+//   - sprintf / snprintf : formatting the header string
+//   - compute_hash       : hashing the combined header + data
+//   - object_exists      : checking for deduplication
+//   - mkdir              : creating the shard directory (use mode 0755)
+//   - open, write, close : creating and writing to the temp file
+//                          (Use O_CREAT | O_WRONLY | O_TRUNC, mode 0644)
+//   - fsync              : flushing the file descriptor to disk
+//   - rename             : atomically moving the temp file to the final path
+//
+
+//
+// Returns 0 on success, -1 on error.
+int object_write(ObjectType type, const void *data, size_t len, ObjectID *id_out) {
+    // TODO: Implement
+    (void)type; (void)data; (void)len; (void)id_out;
+    return -1;
+}
