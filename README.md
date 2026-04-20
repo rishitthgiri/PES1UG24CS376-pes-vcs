@@ -147,3 +147,4 @@ PASS: .pes/HEAD exists
 === All integration tests completed ===
 Exit code: 0
 ```
+
